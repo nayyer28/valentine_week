@@ -1,6 +1,3 @@
-// assets/app.js
-const TZ = "Asia/Kolkata"; // use her time behind the scenes
-
 const DAYS = [
   { key:"rose",      title:"Rose Day",        icon:"🌹", unlock:"2026-02-01T00:00:00", href:"./days/rose.html", hint:"A small surprise is on its way today." },
   { key:"propose",   title:"Propose Day",     icon:"💍", unlock:"2026-02-01T00:00:00", href:"./days/propose.html", hint:"This one needs your full attention." },
@@ -12,23 +9,42 @@ const DAYS = [
   { key:"valentine", title:"Valentine’s Day", icon:"", unlock:"2026-02-14T00:00:00", href:"./days/valentine.html", hint:"The main event." , isValentine:true},
 ];
 
-// ---- Time helpers (Mumbai time) ----
-function nowInTZ() {
-  const dtf = new Intl.DateTimeFormat("en-CA", {
-    timeZone: TZ,
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
-    hour12: false,
-  });
+// ===== Server time (Cloudflare Worker) =====
+const TIME_ENDPOINT = "https://valetine-time.nayyersaahil.workers.dev/"; // your worker
+let serverOffsetMs = 0; // serverNow - deviceNow
 
-  const parts = Object.fromEntries(dtf.formatToParts(new Date()).map(p => [p.type, p.value]));
-  const iso = `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`;
-  return new Date(iso);
+async function syncServerTime() {
+  try {
+    const res = await fetch(TIME_ENDPOINT, { cache: "no-store" });
+    const data = await res.json();
+    const serverNowMs = Number(data.nowMs);
+    if (!Number.isFinite(serverNowMs)) throw new Error("bad nowMs");
+    serverOffsetMs = serverNowMs - Date.now();
+  } catch (e) {
+    // fallback: device time (still works, just less robust)
+    serverOffsetMs = 0;
+  }
 }
 
-function parseUnlock(unlockStr) {
-  return new Date(unlockStr);
+function nowServerMs() {
+  return Date.now() + serverOffsetMs;
 }
+
+// ===== IST parsing (treat unlock strings as IST local time) =====
+const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000; // UTC+05:30
+
+function parseUnlockISTtoMs(unlockStr) {
+  // unlockStr like "2026-02-12T00:00:00" (intended IST)
+  const [datePart, timePart = "00:00:00"] = unlockStr.split("T");
+  const [y, m, d] = datePart.split("-").map(Number);
+  const [hh, mm, ss] = timePart.split(":").map(Number);
+
+  // Create a UTC timestamp for the same Y-M-D hh:mm:ss, then subtract IST offset
+  // because "2026-02-12 00:00 IST" == "2026-02-11 18:30 UTC"
+  const utcMs = Date.UTC(y, m - 1, d, hh || 0, mm || 0, ss || 0);
+  return utcMs - IST_OFFSET_MS;
+}
+
 
 function formatCountdownWithSeconds(ms) {
   const totalSeconds = Math.max(0, Math.floor(ms / 1000));
@@ -92,16 +108,16 @@ function cardTemplate(item, unlocked, countdownText, visited) {
 
 
 function hydrate() {
-  const now = nowInTZ();
+  const nowMs = nowServerMs();
 
   DAYS.forEach(item => {
-    const unlockAt = parseUnlock(item.unlock);
-    const unlocked = now >= unlockAt;
+    const unlockAtMs = parseUnlockISTtoMs(item.unlock);
+    const unlocked = nowMs >= unlockAtMs;
 
     const el = document.querySelector(`.flip[data-key="${item.key}"]`);
     if (!el) return;
 
-    const countdown = unlocked ? "now" : formatCountdownWithSeconds(unlockAt - now);
+    const countdown = unlocked ? "now" : formatCountdownWithSeconds(unlockAtMs - nowMs);
 
     // Update stored state
     el.setAttribute("data-unlocked", unlocked ? "1" : "0");
@@ -124,16 +140,17 @@ function hydrate() {
   });
 }
 
+
 function render() {
   const container = document.getElementById("cards");
   if (!container) return;
 
-  const now = nowInTZ();
+  const nowMs = nowServerMs();
 
   container.innerHTML = DAYS.map(item => {
-    const unlockAt = parseUnlock(item.unlock);
-    const unlocked = now >= unlockAt;
-    const countdownText = unlocked ? "now" : formatCountdownWithSeconds(unlockAt - now);
+    const unlockAtMs = parseUnlockISTtoMs(item.unlock);
+    const unlocked = nowMs >= unlockAtMs;
+    const countdownText = unlocked ? "now" : formatCountdownWithSeconds(unlockAtMs - nowMs);
 
     const key = String(item.key || "").trim();
     const visited = localStorage.getItem(`vw:visited:${key}`) === "1";
@@ -187,11 +204,9 @@ function render() {
     el.addEventListener("pointerup", (e) => {
       if (e.target.closest("a.btn")) return;
 
-      // On touch devices: tap-to-flip
       const touchLike = window.matchMedia("(hover: none)").matches;
 
       if (touchLike) {
-        // prevent the tap from behaving like a weird click
         e.preventDefault?.();
 
         if (!el.classList.contains("is-flipped")) {
@@ -199,7 +214,6 @@ function render() {
           return;
         }
 
-        // already flipped -> attempt open
         if (isUnlocked()) {
           markVisited();
           window.location.href = href();
@@ -207,7 +221,6 @@ function render() {
           alert(`Come back in ${countdown()} ❤️`);
         }
       } else {
-        // Desktop: open directly
         if (isUnlocked()) {
           markVisited();
           window.location.href = href();
@@ -220,6 +233,11 @@ function render() {
 }
 
 
-render();
-hydrate();              // immediately sync
-setInterval(hydrate, 1000);  // update countdown & button every second without re-rendering
+
+(async function init(){
+  await syncServerTime();      // get server time once
+  render();                    // render cards once
+  hydrate();                   // sync immediately
+  setInterval(hydrate, 1000);  // update countdown every second
+  setInterval(syncServerTime, 60_000); // resync server time every minute
+})();
