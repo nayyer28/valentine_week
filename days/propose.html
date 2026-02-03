@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Rose Day</title>
+  <link rel="stylesheet" href="../assets/styles.css"/>
+</head>
+<body>
+  <header class="hero">
+    <h1>🤗 Rose Day</h1>
+    <p>Come back here today. I left something for you.</p>
+  </header>
+
+  <main class="card">
+    <p>Placeholder content. I’ll add the real surprise soon.</p>
+    <button class="btn" id="done">Mark as completed</button>
+    <a class="btn" href="../index.html">Back</a>
+  </main>
+
+  <script>
+    document.getElementById("done").addEventListener("click", () => {
+      localStorage.setItem("done:hug", "1");
+      alert("Saved ❤️");
+    });
+  </script>
+   <script>
+  // IMPORTANT: change "rose" to the correct key for that page
+  localStorage.setItem("vw:visited:propose", "1");
+</script>
+</body>
+</html>

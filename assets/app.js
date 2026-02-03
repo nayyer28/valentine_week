@@ -3,7 +3,7 @@ const TZ = "Asia/Kolkata"; // use her time behind the scenes
 
 const DAYS = [
   { key:"rose",      title:"Rose Day",        icon:"🌹", unlock:"2026-02-01T00:00:00", href:"./days/rose.html", hint:"A small surprise is on its way today." },
-  { key:"propose",   title:"Propose Day",     icon:"💍", unlock:"2026-02-08T00:00:00", href:"./days/propose.html", hint:"This one needs your full attention." },
+  { key:"propose",   title:"Propose Day",     icon:"💍", unlock:"2026-02-01T00:00:00", href:"./days/propose.html", hint:"This one needs your full attention." },
   { key:"chocolate", title:"Chocolate Day",   icon:"🍫", unlock:"2026-02-09T00:00:00", href:"./days/chocolate.html", hint:"Sweet, simple, and very you." },
   { key:"teddy",     title:"Teddy Day",       icon:"🧸", unlock:"2026-02-10T00:00:00", href:"./days/teddy.html", hint:"A stand-in for my hugs." },
   { key:"promise",   title:"Promise Day",     icon:"🤞", unlock:"2026-02-11T00:00:00", href:"./days/promise.html", hint:"No drama. Just intent." },
@@ -49,7 +49,7 @@ function formatCountdownWithSeconds(ms) {
 
 
 // ---- UI ----
-function cardTemplate(item, unlocked, countdownText) {
+function cardTemplate(item, unlocked, countdownText, visited) {
   const key = String(item.key || "").trim();
   const btnClass = unlocked ? "btn unlocked" : "btn locked";
   const btnText = "Click me";
@@ -60,7 +60,7 @@ function cardTemplate(item, unlocked, countdownText) {
     : `<div class="bigEmoji" aria-hidden="true">${item.icon}</div>`;
 
   return `
-    <div class="flip ${key}" data-key="${key}" data-href="${item.href}"
+    <div class="flip ${key} ${visited ? "visited" : ""}" data-key="${key}" data-href="${item.href}"
          data-unlocked="${unlocked ? "1" : "0"}" data-countdown="${countdownText}">
       <div class="flipInner">
         <div class="face front">
@@ -124,7 +124,6 @@ function hydrate() {
   });
 }
 
-
 function render() {
   const container = document.getElementById("cards");
   if (!container) return;
@@ -135,38 +134,91 @@ function render() {
     const unlockAt = parseUnlock(item.unlock);
     const unlocked = now >= unlockAt;
     const countdownText = unlocked ? "now" : formatCountdownWithSeconds(unlockAt - now);
-    return cardTemplate(item, unlocked, countdownText);
+
+    const key = String(item.key || "").trim();
+    const visited = localStorage.getItem(`vw:visited:${key}`) === "1";
+
+    return cardTemplate(item, unlocked, countdownText, visited);
   }).join("");
 
-  // Attach click behavior once (doesn't get duplicated if we don't re-render repeatedly)
+  let openCard = null;
+
+  const closeOpenCard = () => {
+    if (openCard) openCard.classList.remove("is-flipped");
+    openCard = null;
+  };
+
+  // Close when tapping outside
+  document.addEventListener("pointerup", (e) => {
+    if (!e.target.closest(".flip")) closeOpenCard();
+  });
+
   container.querySelectorAll(".flip").forEach(el => {
     const btn = el.querySelector("a.btn");
+    const key = String(el.getAttribute("data-key") || "").trim();
 
+    const isUnlocked = () => el.getAttribute("data-unlocked") === "1";
+    const href = () => el.getAttribute("data-href");
+    const countdown = () => el.getAttribute("data-countdown");
+
+    const markVisited = () => {
+      if (!key) return;
+      localStorage.setItem(`vw:visited:${key}`, "1");
+      el.classList.add("visited");
+    };
+
+    const flipOpen = () => {
+      if (openCard && openCard !== el) openCard.classList.remove("is-flipped");
+      el.classList.add("is-flipped");
+      openCard = el;
+    };
+
+    // Button: locked -> block, unlocked -> allow navigation
     btn.addEventListener("click", (e) => {
-      const unlocked = el.getAttribute("data-unlocked") === "1";
-      const href = el.getAttribute("data-href");
-      const countdown = el.getAttribute("data-countdown");
-
-      if (!unlocked) {
+      if (!isUnlocked()) {
         e.preventDefault();
-        alert(`Come back in ${countdown} ❤️`);
-      } else {
-        // normal navigation via href
+        alert(`Come back in ${countdown()} ❤️`);
+        return;
       }
+      markVisited();
     });
 
-    el.addEventListener("click", (e) => {
+    // Card tap: first tap flips, second tap opens
+    el.addEventListener("pointerup", (e) => {
       if (e.target.closest("a.btn")) return;
 
-      const unlocked = el.getAttribute("data-unlocked") === "1";
-      const href = el.getAttribute("data-href");
-      const countdown = el.getAttribute("data-countdown");
+      // On touch devices: tap-to-flip
+      const touchLike = window.matchMedia("(hover: none)").matches;
 
-      if (unlocked) window.location.href = href;
-      else alert(`Come back in ${countdown} ❤️`);
+      if (touchLike) {
+        // prevent the tap from behaving like a weird click
+        e.preventDefault?.();
+
+        if (!el.classList.contains("is-flipped")) {
+          flipOpen();
+          return;
+        }
+
+        // already flipped -> attempt open
+        if (isUnlocked()) {
+          markVisited();
+          window.location.href = href();
+        } else {
+          alert(`Come back in ${countdown()} ❤️`);
+        }
+      } else {
+        // Desktop: open directly
+        if (isUnlocked()) {
+          markVisited();
+          window.location.href = href();
+        } else {
+          alert(`Come back in ${countdown()} ❤️`);
+        }
+      }
     });
   });
 }
+
 
 render();
 hydrate();              // immediately sync
