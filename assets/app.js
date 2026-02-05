@@ -294,103 +294,51 @@ function render() {
 function setupIntroModal() {
   const overlay = document.getElementById("introOverlay");
   const startBtn = document.getElementById("introStart");
-  const closeBtn = document.getElementById("introClose");
-
-  if (!overlay) return;
+  if (!overlay || !startBtn) return;
 
   const KEY_SEEN = "vw:introSeenSession";
-  const KEY_MUSIC_ARMED = "vw:musicArmedSession";
-
-  const dismiss = () => {
-    overlay.classList.add("is-hidden");
-    overlay.setAttribute("aria-hidden", "true");
-    sessionStorage.setItem(KEY_SEEN, "1"); // session only
-  };
-
-  const celebrateAndStartMusic = () => {
-    // Effects ONLY when explicitly starting
-    try { confettiBurst?.({ pieces: 180, ms: 1400 }); } catch {}
-    try { partyBalloons?.({ count: 34, durMin: 2400, durMax: 3900 }); } catch {}
-    try { showToast?.("Music on 🎶"); } catch {}
-
-    // Start music from a user gesture if possible
-    try {
-      if (window.__vw_music && window.__vw_music.wantsMusic()) {
-        window.__vw_music.play();
-      }
-    } catch {}
-  };
-
-  // Arm music to start on FIRST interaction anywhere (after intro is gone)
-  const armMusicOnFirstGesture = () => {
-    if (sessionStorage.getItem(KEY_MUSIC_ARMED) === "1") return;
-    sessionStorage.setItem(KEY_MUSIC_ARMED, "1");
-
-    const handler = (e) => {
-      // If intro is visible, ignore; Let’s go should be the gesture
-      if (!overlay.classList.contains("is-hidden")) return;
-
-      document.removeEventListener("pointerdown", handler, true);
-      document.removeEventListener("keydown", handler, true);
-
-      try {
-        if (window.__vw_music && window.__vw_music.wantsMusic()) {
-          window.__vw_music.play();
-        }
-      } catch {}
-    };
-
-    // capture=true so it fires early
-    document.addEventListener("pointerdown", handler, true);
-    document.addEventListener("keydown", handler, true);
-  };
 
   const show = () => {
     overlay.classList.remove("is-hidden");
     overlay.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
   };
 
-  // Show only once per session (quietly dismiss if already seen)
+  const hide = () => {
+    overlay.classList.add("is-hidden");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    sessionStorage.setItem(KEY_SEEN, "1");
+  };
+
+  // If seen this session, hide silently (NO effects)
   const seenThisSession = sessionStorage.getItem(KEY_SEEN) === "1";
-  if (seenThisSession) {
-    dismiss();                 // IMPORTANT: no fireworks on reload
-    armMusicOnFirstGesture();  // music will start on first interaction
-  } else {
-    show();
-  }
+  if (seenThisSession) hide();
+  else show();
 
-  // Let’s go => dismiss + celebrate + music now (gesture)
-  if (startBtn) {
-    startBtn.addEventListener("click", () => {
-      dismiss();
-      celebrateAndStartMusic();
-      armMusicOnFirstGesture(); // safe; will no-op if already armed
-    });
-  }
+  // ONLY exit path: Let’s go
+  startBtn.addEventListener("click", async () => {
+    hide();
 
-  // Close (X) => just dismiss, no celebration
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      dismiss();
-      armMusicOnFirstGesture();
-    });
-  }
+    // Effects only here
+    try { confettiBurst?.({ pieces: 180, ms: 1400 }); } catch {}
+    try { partyBalloons?.({ count: 34, durMin: 2400, durMax: 3900 }); } catch {}
+    try { showToast?.("Music on 🎶"); } catch {}
 
-  // Tap outside card => just dismiss, no celebration
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) {
-      dismiss();
-      armMusicOnFirstGesture();
+    // Music only here (gesture-safe)
+    try {
+      if (window.__vw_music && window.__vw_music.wantsMusic?.()) {
+        await window.__vw_music.play();
+      } else if (window.__vw_music && !window.__vw_music.wantsMusic) {
+        // if you ever remove wantsMusic(), still try play
+        await window.__vw_music.play();
+      }
+    } catch {
+      // ignore autoplay failures
     }
   });
 
-  // Escape key close (desktop) => just dismiss, no celebration
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !overlay.classList.contains("is-hidden")) {
-      dismiss();
-      armMusicOnFirstGesture();
-    }
-  });
+  // No outside click close, no escape close
 }
 
 function setupLandingMusic() {

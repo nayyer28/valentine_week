@@ -446,22 +446,6 @@ a.btn {
   gap: 12px; /* removes the “huge gap” feel */
 }
 
-/* Close button */
-.introClose {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.22);
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 5;
-}
-
 .introCard::before,
 .introCard::after{
   pointer-events: none;
