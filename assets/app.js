@@ -1,12 +1,69 @@
 const DAYS = [
-  { key:"rose",      title:"Rose Day",        icon:"🌹", unlock:"2026-02-01T00:00:00", href:"./days/rose.html", hint:"A small surprise is on its way today." },
-  { key:"propose",   title:"Propose Day",     icon:"💍", unlock:"2026-02-01T00:00:00", href:"./days/propose.html", hint:"This one needs your full attention." },
-  { key:"chocolate", title:"Chocolate Day",   icon:"🍫", unlock:"2026-02-09T00:00:00", href:"./days/chocolate.html", hint:"Sweet, simple, and very you." },
-  { key:"teddy",     title:"Teddy Day",       icon:"🧸", unlock:"2026-02-10T00:00:00", href:"./days/teddy.html", hint:"A stand-in for my hugs." },
-  { key:"promise",   title:"Promise Day",     icon:"🤞", unlock:"2026-02-11T00:00:00", href:"./days/promise.html", hint:"No drama. Just intent." },
-  { key:"hug",       title:"Hug Day",         icon:"🤗", unlock:"2026-02-12T00:00:00", href:"./days/hug.html", hint:"Hold-to-hug. Trust me." },
-  { key:"kiss",      title:"Kiss Day",        icon:"💋", unlock:"2026-02-13T00:00:00", href:"./days/kiss.html", hint:"Soft. Not loud." },
-  { key:"valentine", title:"Valentine’s Day", icon:"", unlock:"2026-02-14T00:00:00", href:"./days/valentine.html", hint:"The main event." , isValentine:true},
+  {
+    key: "rose",
+    title: "Rose Day",
+    icon: "🌹",
+    unlock: "2026-02-01T00:00:00",
+    href: "./days/rose.html",
+    hint: "A small surprise is on its way today.",
+  },
+  {
+    key: "propose",
+    title: "Propose Day",
+    icon: "💍",
+    unlock: "2026-02-01T00:00:00",
+    href: "./days/propose.html",
+    hint: "This one needs your full attention.",
+  },
+  {
+    key: "chocolate",
+    title: "Chocolate Day",
+    icon: "🍫",
+    unlock: "2026-02-09T00:00:00",
+    href: "./days/chocolate.html",
+    hint: "Sweet, simple, and very you.",
+  },
+  {
+    key: "teddy",
+    title: "Teddy Day",
+    icon: "🧸",
+    unlock: "2026-02-10T00:00:00",
+    href: "./days/teddy.html",
+    hint: "A stand-in for my hugs.",
+  },
+  {
+    key: "promise",
+    title: "Promise Day",
+    icon: "🤞",
+    unlock: "2026-02-11T00:00:00",
+    href: "./days/promise.html",
+    hint: "No drama. Just intent.",
+  },
+  {
+    key: "hug",
+    title: "Hug Day",
+    icon: "🤗",
+    unlock: "2026-02-12T00:00:00",
+    href: "./days/hug.html",
+    hint: "Hold-to-hug. Trust me.",
+  },
+  {
+    key: "kiss",
+    title: "Kiss Day",
+    icon: "💋",
+    unlock: "2026-02-13T00:00:00",
+    href: "./days/kiss.html",
+    hint: "Soft. Not loud.",
+  },
+  {
+    key: "valentine",
+    title: "Valentine’s Day",
+    icon: "",
+    unlock: "2026-02-14T00:00:00",
+    href: "./days/valentine.html",
+    hint: "The main event.",
+    isValentine: true,
+  },
 ];
 
 // ===== Server time (Cloudflare Worker) =====
@@ -45,7 +102,6 @@ function parseUnlockISTtoMs(unlockStr) {
   return utcMs - IST_OFFSET_MS;
 }
 
-
 function formatCountdownWithSeconds(ms) {
   const totalSeconds = Math.max(0, Math.floor(ms / 1000));
   const days = Math.floor(totalSeconds / 86400);
@@ -63,7 +119,6 @@ function formatCountdownWithSeconds(ms) {
   return [d, h, m, s].filter(Boolean).join(" ");
 }
 
-
 // ---- UI ----
 function cardTemplate(item, unlocked, countdownText, visited) {
   const key = String(item.key || "").trim();
@@ -71,9 +126,10 @@ function cardTemplate(item, unlocked, countdownText, visited) {
   const btnText = "Click me";
   const backTitle = unlocked ? "It’s open ❤️" : "Not yet";
 
-  const frontEmoji = (key === "valentine")
-    ? `<div class="bigEmoji valBeat" aria-hidden="true">❤️</div>`
-    : `<div class="bigEmoji" aria-hidden="true">${item.icon}</div>`;
+  const frontEmoji =
+    key === "valentine"
+      ? `<div class="bigEmoji valBeat" aria-hidden="true">❤️</div>`
+      : `<div class="bigEmoji" aria-hidden="true">${item.icon}</div>`;
 
   return `
     <div class="flip ${key} ${visited ? "visited" : ""}" data-key="${key}" data-href="${item.href}"
@@ -104,20 +160,19 @@ function cardTemplate(item, unlocked, countdownText, visited) {
   `;
 }
 
-
-
-
 function hydrate() {
   const nowMs = nowServerMs();
 
-  DAYS.forEach(item => {
+  DAYS.forEach((item) => {
     const unlockAtMs = parseUnlockISTtoMs(item.unlock);
     const unlocked = nowMs >= unlockAtMs;
 
     const el = document.querySelector(`.flip[data-key="${item.key}"]`);
     if (!el) return;
 
-    const countdown = unlocked ? "now" : formatCountdownWithSeconds(unlockAtMs - nowMs);
+    const countdown = unlocked
+      ? "now"
+      : formatCountdownWithSeconds(unlockAtMs - nowMs);
 
     // Update stored state
     el.setAttribute("data-unlocked", unlocked ? "1" : "0");
@@ -127,7 +182,10 @@ function hydrate() {
     const h3 = el.querySelector(".back h3");
     const cd = el.querySelector(".countdown");
     if (h3) h3.textContent = unlocked ? "It’s open ❤️" : "Not yet";
-    if (cd) cd.innerHTML = unlocked ? "You can open this now." : `Unlocks in <b>${countdown}</b>`;
+    if (cd)
+      cd.innerHTML = unlocked
+        ? "You can open this now."
+        : `Unlocks in <b>${countdown}</b>`;
 
     // Update button
     const btn = el.querySelector("a.btn");
@@ -140,17 +198,18 @@ function hydrate() {
   });
 }
 
-
 function render() {
   const container = document.getElementById("cards");
   if (!container) return;
 
   const nowMs = nowServerMs();
 
-  container.innerHTML = DAYS.map(item => {
+  container.innerHTML = DAYS.map((item) => {
     const unlockAtMs = parseUnlockISTtoMs(item.unlock);
     const unlocked = nowMs >= unlockAtMs;
-    const countdownText = unlocked ? "now" : formatCountdownWithSeconds(unlockAtMs - nowMs);
+    const countdownText = unlocked
+      ? "now"
+      : formatCountdownWithSeconds(unlockAtMs - nowMs);
 
     const key = String(item.key || "").trim();
     const visited = localStorage.getItem(`vw:visited:${key}`) === "1";
@@ -170,7 +229,7 @@ function render() {
     if (!e.target.closest(".flip")) closeOpenCard();
   });
 
-  container.querySelectorAll(".flip").forEach(el => {
+  container.querySelectorAll(".flip").forEach((el) => {
     const btn = el.querySelector("a.btn");
     const key = String(el.getAttribute("data-key") || "").trim();
 
@@ -232,12 +291,278 @@ function render() {
   });
 }
 
+function setupIntroModal() {
+  const overlay = document.getElementById("introOverlay");
+  const startBtn = document.getElementById("introStart");
+  const closeBtn = document.getElementById("introClose");
 
+  if (!overlay) return;
 
-(async function init(){
-  await syncServerTime();      // get server time once
-  render();                    // render cards once
-  hydrate();                   // sync immediately
-  setInterval(hydrate, 1000);  // update countdown every second
+  const KEY = "vw:introSeenSession";
+
+  const hide = () => {
+    overlay.classList.add("is-hidden");
+    overlay.setAttribute("aria-hidden", "true");
+    sessionStorage.setItem(KEY, "1"); // <-- session only
+    confettiBurst({ pieces: 180, ms: 1400 });
+    partyBalloons({ count: 34, durMin: 2400, durMax: 3900 });
+    if (window.__vw_music && window.__vw_music.wantsMusic()) {
+      window.__vw_music.play();
+    }
+    showToast("Music on 🎶");
+  };
+
+  const show = () => {
+    overlay.classList.remove("is-hidden");
+    overlay.setAttribute("aria-hidden", "false");
+  };
+
+  // Show only once (optional)
+  const seenThisSession = sessionStorage.getItem(KEY) === "1";
+  if (seenThisSession) hide();
+  else show();
+
+  // Wire buttons
+  if (startBtn) startBtn.addEventListener("click", hide);
+  if (closeBtn) closeBtn.addEventListener("click", hide);
+
+  // Tap outside the card closes too
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) hide();
+  });
+
+  // Escape key close (desktop)
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") hide();
+  });
+}
+
+function setupLandingMusic() {
+  const audio = document.getElementById("bgm");
+  const btn = document.getElementById("musicBtn");
+  if (!audio || !btn) return;
+
+  const KEY = "vw:music:on:session";
+
+  const setUI = (playing) => {
+    btn.setAttribute("aria-pressed", playing ? "true" : "false");
+    btn.textContent = playing ? "⏸ 🎧" : "▶︎ 🎧";
+    btn.title = playing ? "Pause music" : "Play music";
+  };
+
+  // Default intent: ON, but actual playback might be blocked until a gesture
+  const wanted = sessionStorage.getItem(KEY);
+  const wantsMusic = wanted === null ? true : wanted === "1";
+
+  // IMPORTANT: start UI as NOT playing until we successfully play.
+  setUI(false);
+
+  const play = async () => {
+    try {
+      // Some browsers require volume to be set after user gesture; keep it simple:
+      audio.volume = 0.35;
+
+      await audio.play();
+      setUI(true);
+      sessionStorage.setItem(KEY, "1");
+      return true;
+    } catch (e) {
+      // Autoplay blocked or failed: keep UI as "play"
+      setUI(false);
+      sessionStorage.setItem(KEY, "0");
+      return false;
+    }
+  };
+
+  const pause = () => {
+    audio.pause();
+    setUI(false);
+    sessionStorage.setItem(KEY, "0");
+  };
+
+  // Toggle button: if currently playing -> pause, else -> play
+  btn.addEventListener("click", async () => {
+    const isPlaying = !audio.paused && !audio.ended;
+    if (isPlaying) pause();
+    else await play();
+  });
+
+  // Expose for intro modal to start music on "Let's go"
+  window.__vw_music = {
+    play,
+    pause,
+    wantsMusic: () => (sessionStorage.getItem(KEY) ?? "1") === "1",
+  };
+
+  // If she wants music, we don't autoplay here (mobile blocks).
+  // We start it from the intro "Let's go" gesture.
+  if (!wantsMusic) {
+    // If she previously paused in this session, keep it off.
+    setUI(false);
+  }
+}
+
+function partyBalloons(opts = {}) {
+  const { count = 28, durMin = 2600, durMax = 4200 } = opts;
+
+  let layer = document.querySelector(".partyLayer");
+  if (!layer) {
+    layer = document.createElement("div");
+    layer.className = "partyLayer";
+    document.body.appendChild(layer);
+  }
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const colors = [
+    "#ff4fa3",
+    "#ff7bbd",
+    "#ff3b6a",
+    "#ffb3d9",
+    "#ff5c8a",
+    "#ff8fb3",
+    "#ffd1e8",
+    "#ff6fb1",
+  ];
+
+  for (let i = 0; i < count; i++) {
+    const outer = document.createElement("div");
+    outer.className = "balloon";
+
+    // spread across screen
+    outer.style.left = `${rand(6, 94)}%`;
+
+    // stable rise params
+    outer.style.setProperty("--x", `${rand(-10, 10).toFixed(0)}px`);
+    outer.style.setProperty("--rise", `${rand(120, 160).toFixed(0)}vh`);
+    outer.style.setProperty("--dur", `${rand(durMin, durMax).toFixed(0)}ms`);
+    outer.style.setProperty("--delay", `${rand(0, 220).toFixed(0)}ms`);
+
+    const inner = document.createElement("div");
+    inner.className = "balloonInner";
+    inner.style.setProperty(
+      "--color",
+      colors[Math.floor(rand(0, colors.length))],
+    );
+
+    // depth / variety
+    inner.style.setProperty("--s", rand(0.78, 1.22).toFixed(2));
+    inner.style.setProperty("--amp", `${rand(10, 22).toFixed(0)}px`);
+    inner.style.setProperty("--swayDur", `${rand(900, 1500).toFixed(0)}ms`);
+
+    const string = document.createElement("div");
+    string.className = "balloonString";
+
+    inner.appendChild(string);
+    outer.appendChild(inner);
+    layer.appendChild(outer);
+
+    const total =
+      parseFloat(outer.style.getPropertyValue("--dur")) +
+      parseFloat(outer.style.getPropertyValue("--delay")) +
+      800;
+
+    setTimeout(() => outer.remove(), total);
+  }
+
+  // Optional: remove layer later when empty
+  setTimeout(() => {
+    if (layer && layer.childElementCount === 0) layer.remove();
+  }, durMax + 1800);
+}
+
+function confettiBurst(opts = {}) {
+  const { pieces = 160, ms = 1400 } = opts;
+
+  let c = document.querySelector("canvas.confetti");
+  if (!c) {
+    c = document.createElement("canvas");
+    c.className = "confetti";
+    document.body.appendChild(c);
+  }
+
+  const ctx = c.getContext("2d");
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  const resize = () => {
+    c.width = Math.floor(window.innerWidth * dpr);
+    c.height = Math.floor(window.innerHeight * dpr);
+    c.style.width = window.innerWidth + "px";
+    c.style.height = window.innerHeight + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  resize();
+
+  const W = window.innerWidth,
+    H = window.innerHeight;
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  const ps = [];
+  for (let i = 0; i < pieces; i++) {
+    ps.push({
+      x: rand(0, W),
+      y: H + rand(10, 140),
+      vx: rand(-1.6, 1.6),
+      vy: rand(-10.5, -6.5),
+      g: rand(0.12, 0.22),
+      w: rand(4, 8),
+      h: rand(2, 5),
+      rot: rand(0, Math.PI * 2),
+      vr: rand(-0.25, 0.25),
+      life: rand(50, 90),
+      color: `hsl(${Math.floor(rand(0, 360))} 90% 65%)`,
+    });
+  }
+
+  const start = performance.now();
+  function tick(t) {
+    const dt = t - start;
+    ctx.clearRect(0, 0, W, H);
+
+    for (const p of ps) {
+      if (p.life <= 0) continue;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.g;
+      p.rot += p.vr;
+      p.life -= 1;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+
+    if (dt < ms) requestAnimationFrame(tick);
+    else ctx.clearRect(0, 0, W, H);
+  }
+
+  requestAnimationFrame(tick);
+  window.addEventListener("resize", resize, { once: true });
+}
+
+function showToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "toast";
+    t.className = "toast";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1600);
+}
+
+async function init() {
+  setupIntroModal();
+  setupLandingMusic();
+  await syncServerTime(); // get server time once
+  render(); // render cards once
+  hydrate(); // sync immediately
+  setInterval(hydrate, 1000); // update countdown every second
   setInterval(syncServerTime, 60_000); // resync server time every minute
-})();
+}
+
+init();

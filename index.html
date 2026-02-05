@@ -1,22 +1,65 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Valentine Week</title>
-  <link rel="stylesheet" href="./assets/styles.css"/>
-</head>
-<body>
-  <header class="hero">
-    <div class="sparkles" aria-hidden="true"></div>
-    <h1 id="title">A Week for You ❤️</h1>
-    <p id="subtitle">Some doors open only when it’s time.</p>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valentine Week</title>
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="introOverlay" id="introOverlay" aria-hidden="false">
+      <div
+        class="introCard"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="introTitle"
+      >
+        <button class="introClose" id="introClose" aria-label="Close">×</button>
 
-  <main class="wrap">
-  <section class="board" id="cards"></section>
-</main>
+        <h2 class="introTitle fancy" id="introTitle">
+          Our first<br />
+          Valentine’s week 💓
+        </h2>
 
-  <script src="./assets/app.js"></script>
-</body>
+        <div class="introBanner" aria-hidden="true">
+          <img
+            src="https://media1.tenor.com/m/1Q7oo3Q6uw4AAAAC/taylor-taylor-swift-eras-tour.gif"
+            alt="Are you ready for it?"
+          />
+        </div>
+
+        <button class="introBtn primary" id="introStart">Let’s go</button>
+      </div>
+    </div>
+    <header class="hero">
+      <div class="sparkles" aria-hidden="true"></div>
+      <h1 id="title">A Week for You ❤️</h1>
+      <p id="subtitle">Some doors open only when it’s time.</p>
+    </header>
+
+    <main class="wrap">
+      <section class="board" id="cards"></section>
+    </main>
+
+    <audio id="bgm" preload="auto" loop>
+      <source src="./assets/audio/landing_page.mp3" type="audio/mpeg" />
+    </audio>
+
+    <button
+      class="musicFab"
+      id="musicBtn"
+      aria-pressed="true"
+      title="Pause music"
+    >
+      ⏸ 🎧
+    </button>
+
+    <script src="./assets/app.js"></script>
+  </body>
 </html>
