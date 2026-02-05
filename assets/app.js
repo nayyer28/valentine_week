@@ -298,18 +298,51 @@ function setupIntroModal() {
 
   if (!overlay) return;
 
-  const KEY = "vw:introSeenSession";
+  const KEY_SEEN = "vw:introSeenSession";
+  const KEY_MUSIC_ARMED = "vw:musicArmedSession";
 
-  const hide = () => {
+  const dismiss = () => {
     overlay.classList.add("is-hidden");
     overlay.setAttribute("aria-hidden", "true");
-    sessionStorage.setItem(KEY, "1"); // <-- session only
-    confettiBurst({ pieces: 180, ms: 1400 });
-    partyBalloons({ count: 34, durMin: 2400, durMax: 3900 });
-    if (window.__vw_music && window.__vw_music.wantsMusic()) {
-      window.__vw_music.play();
-    }
-    showToast("Music on 🎶");
+    sessionStorage.setItem(KEY_SEEN, "1"); // session only
+  };
+
+  const celebrateAndStartMusic = () => {
+    // Effects ONLY when explicitly starting
+    try { confettiBurst?.({ pieces: 180, ms: 1400 }); } catch {}
+    try { partyBalloons?.({ count: 34, durMin: 2400, durMax: 3900 }); } catch {}
+    try { showToast?.("Music on 🎶"); } catch {}
+
+    // Start music from a user gesture if possible
+    try {
+      if (window.__vw_music && window.__vw_music.wantsMusic()) {
+        window.__vw_music.play();
+      }
+    } catch {}
+  };
+
+  // Arm music to start on FIRST interaction anywhere (after intro is gone)
+  const armMusicOnFirstGesture = () => {
+    if (sessionStorage.getItem(KEY_MUSIC_ARMED) === "1") return;
+    sessionStorage.setItem(KEY_MUSIC_ARMED, "1");
+
+    const handler = (e) => {
+      // If intro is visible, ignore; Let’s go should be the gesture
+      if (!overlay.classList.contains("is-hidden")) return;
+
+      document.removeEventListener("pointerdown", handler, true);
+      document.removeEventListener("keydown", handler, true);
+
+      try {
+        if (window.__vw_music && window.__vw_music.wantsMusic()) {
+          window.__vw_music.play();
+        }
+      } catch {}
+    };
+
+    // capture=true so it fires early
+    document.addEventListener("pointerdown", handler, true);
+    document.addEventListener("keydown", handler, true);
   };
 
   const show = () => {
@@ -317,23 +350,46 @@ function setupIntroModal() {
     overlay.setAttribute("aria-hidden", "false");
   };
 
-  // Show only once (optional)
-  const seenThisSession = sessionStorage.getItem(KEY) === "1";
-  if (seenThisSession) hide();
-  else show();
+  // Show only once per session (quietly dismiss if already seen)
+  const seenThisSession = sessionStorage.getItem(KEY_SEEN) === "1";
+  if (seenThisSession) {
+    dismiss();                 // IMPORTANT: no fireworks on reload
+    armMusicOnFirstGesture();  // music will start on first interaction
+  } else {
+    show();
+  }
 
-  // Wire buttons
-  if (startBtn) startBtn.addEventListener("click", hide);
-  if (closeBtn) closeBtn.addEventListener("click", hide);
+  // Let’s go => dismiss + celebrate + music now (gesture)
+  if (startBtn) {
+    startBtn.addEventListener("click", () => {
+      dismiss();
+      celebrateAndStartMusic();
+      armMusicOnFirstGesture(); // safe; will no-op if already armed
+    });
+  }
 
-  // Tap outside the card closes too
+  // Close (X) => just dismiss, no celebration
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      dismiss();
+      armMusicOnFirstGesture();
+    });
+  }
+
+  // Tap outside card => just dismiss, no celebration
   overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) hide();
+    if (e.target === overlay) {
+      dismiss();
+      armMusicOnFirstGesture();
+    }
   });
 
-  // Escape key close (desktop)
+  // Escape key close (desktop) => just dismiss, no celebration
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") hide();
+    if (e.key === "Escape" && !overlay.classList.contains("is-hidden")) {
+      dismiss();
+      armMusicOnFirstGesture();
+    }
   });
 }
 
