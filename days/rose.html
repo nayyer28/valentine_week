@@ -5,28 +5,55 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Rose Day</title>
   <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="./rose.css"/>
 </head>
-<body>
-  <header class="hero">
-    <h1>🤗 Rose Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="rosePage">
+  <main class="roseWrap">
+    <header class="roseHeader">
+      <h1>🌹 Rose Day</h1>
+      <p>Hit play, then snap your rose to reveal its meaning.</p>
+    </header>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
+    <section class="roseStage" aria-live="polite">
+      <div class="camShell" id="camShell">
+        <video id="camera" autoplay playsinline muted></video>
+        <div class="fallbackBg" id="fallbackBg" aria-hidden="true"></div>
+
+        <button class="downloadBtn is-hidden" id="downloadBtn" type="button" aria-label="Download">⬇️</button>
+
+        <div class="roulette" id="roulette" aria-hidden="true">
+          <img class="rouletteImg" id="rouletteImg" src="" alt="Bouquet"/>
+        </div>
+
+        <div class="bouquet" id="bouquet" aria-hidden="true">
+          <img id="bouquetImg" src="" alt="Bouquet"/>
+        </div>
+
+        <div class="resultCard" id="resultCard" aria-hidden="true">
+          <h2 id="resultTitle">Ruby Red Rose</h2>
+          <p id="resultText">Bold love, steady heart.</p>
+        </div>
+
+        <div class="controls">
+          <button class="shutter is-hidden" id="shutterBtn" aria-label="Snap and reveal">
+            <span class="shutterRing"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="outerControls">
+        <button class="btn playBtn" id="playBtn" type="button">Play</button>
+        <button class="btn ghost is-hidden" id="againBtn" type="button">Play again</button>
+      </div>
+    </section>
   </main>
 
+  <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/landing_page.mp3" preload="auto" loop></audio>
+
   <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
+    localStorage.setItem("vw:visited:rose", "1");
   </script>
-   <script>
-  // IMPORTANT: change "rose" to the correct key for that page
-  localStorage.setItem("vw:visited:rose", "1");
-</script>
+  <script src="./rose.js"></script>
 </body>
 </html>
