@@ -68,6 +68,10 @@ const els = {
   resultCard: document.getElementById("resultCard"),
   resultTitle: document.getElementById("resultTitle"),
   resultText: document.getElementById("resultText"),
+  greetingWrap: document.getElementById("greetingWrap"),
+  greetingMsg: document.getElementById("greetingMsg"),
+  messagePanel: document.getElementById("messagePanel"),
+  revealBtn: document.getElementById("revealBtn"),
   musicBtn: document.getElementById("musicBtn"),
   bgm: document.getElementById("bgm"),
   introOverlay: document.getElementById("introOverlay"),
@@ -166,6 +170,9 @@ function setBouquet(option) {
 function setResult(option) {
   els.resultTitle.textContent = option.name + " Rose";
   els.resultText.textContent = option.message;
+  if (els.greetingMsg) {
+    els.greetingMsg.textContent = option.message;
+  }
 }
 
 function startCycle() {
@@ -175,6 +182,8 @@ function startCycle() {
   els.againBtn.classList.add("is-hidden");
   els.downloadBtn.classList.add("is-hidden");
   els.playBtn.classList.add("is-hidden");
+  els.greetingWrap?.classList.remove("is-visible");
+  els.messagePanel?.classList.remove("is-visible");
   cycleTimer = setInterval(() => {
     cycleIndex = (cycleIndex + 1 + Math.floor(Math.random() * 4)) % ROSE_OPTIONS.length;
     setBouquet(ROSE_OPTIONS[cycleIndex]);
@@ -191,6 +200,8 @@ function stopCycle() {
   els.againBtn.classList.remove("is-hidden");
   els.downloadBtn.classList.remove("is-hidden");
   els.shutterBtn.classList.add("is-hidden");
+  els.messagePanel?.classList.add("is-visible");
+  if (els.greetingWrap) els.greetingWrap.classList.remove("is-visible");
   try {
     confettiBurst();
   } catch {}
@@ -373,6 +384,8 @@ function resetRound() {
   els.downloadBtn.classList.add("is-hidden");
   els.againBtn.classList.add("is-hidden");
   els.playBtn.classList.add("is-hidden");
+  els.greetingWrap?.classList.remove("is-visible");
+  els.messagePanel?.classList.remove("is-visible");
 }
 
 function applyMode(mode) {
@@ -430,6 +443,9 @@ async function onReady() {
   });
 
   els.musicBtn.addEventListener("click", toggleMusic);
+  els.revealBtn?.addEventListener("click", () => {
+    if (els.greetingWrap) els.greetingWrap.classList.add("is-visible");
+  });
 
   resetRound();
   showIntro();

@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Rose Day</title>
+  <title>Sonal's Rose Roulette</title>
   <link rel="stylesheet" href="../assets/styles.css"/>
   <link rel="stylesheet" href="./rose.css"/>
 </head>
 <body class="rosePage" data-key="rose" data-unlock="2026-02-01T00:00:00">
   <main class="roseWrap">
     <header class="roseHeader">
-      <h1> Sonal's Rose Roulette 🌹</h1>
+      <h1>Sonal's Rose Roulette 🌹</h1>
       <p>Snap your rose away!</p>
     </header>
 
@@ -48,6 +48,19 @@
     </section>
   </main>
 
+  <aside class="messageOverlay" id="messagePanel" aria-hidden="true">
+    <div class="messageShell">
+      <div class="messageHeader">A note for Sonal</div>
+      <button class="btn revealBtn" id="revealBtn" type="button">Reveal message</button>
+      <div class="messageBody" id="greetingWrap" aria-hidden="true">
+        <p id="greetingMsg">
+          Sahil asked me to pass this note along: this color reminds him of your kindness, your little habits, and the way you make even small days feel warm. Keep this one close.
+        </p>
+        <div class="signature">— from Sahil’s little messenger</div>
+      </div>
+    </div>
+  </aside>
+
   <div class="introOverlay" id="introOverlay" aria-hidden="false">
     <button class="introPlay" id="introPlay" aria-label="Start">▶︎</button>
   </div>
@@ -63,7 +76,7 @@
   </div>
 
   <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
-  <audio id="bgm" src="../assets/audio/rose_day.mp3" preload="auto" loop></audio>
+  <audio id="bgm" src="../assets/audio/landing_page.mp3" preload="auto" loop></audio>
 
   <script src="./rose.js"></script>
   <script src="./unlock.js"></script>
