@@ -62,22 +62,40 @@ body {
     0 18px 60px rgba(255, 42, 166, 0.1),
     var(--shadow);
   position: relative;
-  padding: 20px 16px 14px;
-  margin-bottom: 16px;
+  padding: 28px 18px 22px;
+  margin-bottom: 18px;
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   overflow: hidden;
+  text-align: center;
 }
 
 .hero h1 {
-  margin: 0 0 6px;
-  font-size: 30px;
-  letter-spacing: 0.2px;
+  margin: 0 0 8px;
+  font-size: clamp(30px, 4.2vw, 46px);
+  letter-spacing: 0.4px;
+  font-family: "Playfair Display", ui-serif, Georgia, serif;
+  font-weight: 900;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 54, 178, 1),
+    rgba(255, 168, 218, 1),
+    rgba(255, 238, 249, 1),
+    rgba(255, 120, 205, 1)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 2px 14px rgba(255, 54, 178, 0.22),
+    0 22px 60px rgba(0, 0, 0, 0.4);
 }
+
 .hero p {
   margin: 0;
   color: var(--textDim);
+  font-size: clamp(14px, 2.2vw, 18px);
 }
 
 /* =========================
