@@ -236,11 +236,17 @@ body {
   font-size: 72px;
   line-height: 1;
   filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.35));
+  animation: emojiBeat 2.4s ease-in-out infinite;
 }
 
 /* Beat only on valentine emoji */
 .valBeat {
   animation: valBeat 1.8s ease-in-out infinite;
+}
+
+/* Subtle beat for all other emojis */
+.bigEmoji:not(.valBeat) {
+  animation: emojiBeat 2.4s ease-in-out infinite;
 }
 
 @keyframes valBeat {
@@ -260,6 +266,32 @@ body {
   72% {
     transform: scale(1.01);
   }
+}
+
+@keyframes emojiBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  22% {
+    transform: scale(1.05);
+  }
+  45% {
+    transform: scale(0.99);
+  }
+  70% {
+    transform: scale(1.03);
+  }
+}
+
+/* Valentine crown sparkle */
+.flip.valentine .frontCenter::after {
+  content: "👑";
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 22px;
+  filter: drop-shadow(0 6px 12px rgba(255, 54, 178, 0.5));
 }
 
 /* =========================
