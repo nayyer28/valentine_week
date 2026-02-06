@@ -10,8 +10,8 @@
 <body class="rosePage">
   <main class="roseWrap">
     <header class="roseHeader">
-      <h1>🌹 Rose Day</h1>
-      <p>Hit play, then snap your rose to reveal its meaning.</p>
+      <h1>🌹 Rose Day Roulette</h1>
+      <p>Snap your rose away!</p>
     </header>
 
     <section class="roseStage" aria-live="polite">
@@ -42,14 +42,28 @@
       </div>
 
       <div class="outerControls">
-        <button class="btn playBtn" id="playBtn" type="button">Play</button>
+        <button class="btn playBtn is-hidden" id="playBtn" type="button">Play</button>
         <button class="btn ghost is-hidden" id="againBtn" type="button">Play again</button>
       </div>
     </section>
   </main>
 
+  <div class="introOverlay" id="introOverlay" aria-hidden="false">
+    <button class="introPlay" id="introPlay" aria-label="Start">▶︎</button>
+  </div>
+
+  <div class="modeOverlay is-hidden" id="modeOverlay" aria-hidden="true">
+    <div class="modeCard">
+      <h3>Choose your mode</h3>
+      <div class="modeBtns">
+        <button class="btn" id="modeCamera">With camera</button>
+        <button class="btn ghost" id="modeStatic">Without camera</button>
+      </div>
+    </div>
+  </div>
+
   <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
-  <audio id="bgm" src="../assets/audio/landing_page.mp3" preload="auto" loop></audio>
+  <audio id="bgm" src="../assets/audio/rose_day.mp3" preload="auto" loop></audio>
 
   <script>
     localStorage.setItem("vw:visited:rose", "1");

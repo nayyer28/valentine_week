@@ -1,0 +1,44 @@
+<svg width="600" height="800" viewBox="0 0 600 800" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
+<path d="M300 750 L180 400 L420 400 Z" fill="#E0E0E0" />
+<path d="M300 750 L140 420 C140 420 220 380 300 420 C380 380 460 420 460 420 L300 750" fill="#F5F5F5" />
+
+<g stroke="#2D5A27" stroke-width="8" stroke-linecap="round">
+<line x1="300" y1="450" x2="280" y2="720" />
+<line x1="300" y1="450" x2="320" y2="710" />
+<line x1="300" y1="450" x2="300" y2="730" />
+</g>
+
+<g fill="#3A7532">
+<ellipse cx="220" cy="380" rx="40" ry="20" transform="rotate(-30 220 380)" />
+<ellipse cx="380" cy="380" rx="40" ry="20" transform="rotate(30 380 380)" />
+<ellipse cx="300" cy="350" rx="45" ry="25" />
+</g>
+
+<g transform="translate(300, 300)">
+<circle r="70" fill="#9B111E" />
+<path d="M-40 -20 Q0 -60 40 -20 Q0 0 -40 -20" fill="#800E19" />
+<circle r="30" fill="#D1192C" opacity="0.6" />
+</g>
+
+<g transform="translate(200, 340) rotate(-15)">
+<circle r="60" fill="#9B111E" />
+<path d="M-35 -15 Q0 -50 35 -15 Q0 0 -35 -15" fill="#800E19" />
+<circle r="25" fill="#D1192C" opacity="0.6" />
+</g>
+
+<g transform="translate(400, 340) rotate(15)">
+<circle r="60" fill="#9B111E" />
+<path d="M-35 -15 Q0 -50 35 -15 Q0 0 -35 -15" fill="#800E19" />
+<circle r="25" fill="#D1192C" opacity="0.6" />
+</g>
+
+<g transform="translate(300, 210)">
+<circle r="55" fill="#9B111E" />
+<path d="M-30 -12 Q0 -45 30 -12 Q0 0 -30 -12" fill="#800E19" />
+<circle r="20" fill="#D1192C" opacity="0.6" />
+</g>
+
+<path d="M270 580 Q300 560 330 580 L330 600 Q300 620 270 600 Z" fill="#D1192C" />
+<circle cx="260" cy="590" r="15" fill="none" stroke="#D1192C" stroke-width="5" />
+<circle cx="340" cy="590" r="15" fill="none" stroke="#D1192C" stroke-width="5" />
+</svg>

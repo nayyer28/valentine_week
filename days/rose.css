@@ -77,6 +77,19 @@
     var(--rose-shadow);
 }
 
+.camShell.mode-static .bouquet {
+  bottom: 28%;
+  width: min(380px, 78vw);
+}
+
+.camShell.mode-static .roulette {
+  bottom: 28%;
+}
+
+.camShell.mode-static .resultCard {
+  bottom: 4%;
+}
+
 #camera,
 #fallbackBg {
   position: absolute;
@@ -132,8 +145,8 @@
   left: 50%;
   bottom: 10%;
   transform: translateX(-50%);
-  width: 150px;
-  height: 150px;
+  width: 220px;
+  height: 220px;
   display: grid;
   place-items: center;
   background: transparent;
@@ -145,8 +158,8 @@
 }
 
 .rouletteImg {
-  width: 120px;
-  height: 120px;
+  width: 220px;
+  height: 220px;
   object-fit: contain;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
 }
@@ -170,7 +183,7 @@
 
 .camShell.is-final .bouquet {
   opacity: 1;
-  transform: translateX(-50%) translateY(-6px) scale(1.02);
+  transform: translateX(-50%) translateY(-6px) scale(1.15);
 }
 
 .camShell.is-final .roulette {
@@ -292,6 +305,55 @@
   to {
     transform: translateY(-140%) translateX(40px) rotate(240deg);
   }
+}
+
+.introOverlay,
+.modeOverlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  z-index: 9998;
+}
+
+.introOverlay.is-hidden,
+.modeOverlay.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.introPlay {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 42px;
+  cursor: pointer;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modeCard {
+  width: min(420px, 88vw);
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.modeCard h3 {
+  margin: 0 0 14px;
+  font-size: 20px;
+}
+
+.modeBtns {
+  display: grid;
+  gap: 10px;
 }
 
 @media (max-width: 640px) {

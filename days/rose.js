@@ -1,52 +1,52 @@
 const ROSE_OPTIONS = [
   {
     name: "Ruby Red",
-    file: "ruby-red.svg",
+    file: "ruby-red.png",
     message: "Bold love, steady heart.",
   },
   {
     name: "Blush Pink",
-    file: "blush-pink.svg",
+    file: "blush-pink.png",
     message: "Soft strength, always kind.",
   },
   {
     name: "Golden Yellow",
-    file: "golden-yellow.svg",
+    file: "golden-yellow.png",
     message: "Sunlit joy, warm and bright.",
   },
   {
     name: "Cream Pearl",
-    file: "cream-pearl.svg",
+    file: "cream-pearl.png",
     message: "Calm presence, gentle glow.",
   },
   {
     name: "Peach Bloom",
-    file: "peach-bloom.svg",
+    file: "peach-bloom.png",
     message: "Playful heart, easy laughter.",
   },
   {
     name: "Coral Kiss",
-    file: "coral-kiss.svg",
+    file: "coral-kiss.png",
     message: "Magnetic energy, sparks everywhere.",
   },
   {
     name: "Lavender Mist",
-    file: "lavender-mist.svg",
+    file: "lavender-mist.png",
     message: "Dreamy soul, soft magic.",
   },
   {
     name: "Burgundy Night",
-    file: "burgundy-night.svg",
+    file: "burgundy-night.png",
     message: "Deep love, fierce loyalty.",
   },
   {
     name: "Ivory Snow",
-    file: "ivory-snow.svg",
+    file: "ivory-snow.png",
     message: "Pure heart, endless patience.",
   },
   {
     name: "Sunset Orange",
-    file: "sunset-orange.svg",
+    file: "sunset-orange.png",
     message: "Radiant charm, fearless smile.",
   },
 ];
@@ -70,6 +70,11 @@ const els = {
   resultText: document.getElementById("resultText"),
   musicBtn: document.getElementById("musicBtn"),
   bgm: document.getElementById("bgm"),
+  introOverlay: document.getElementById("introOverlay"),
+  introPlay: document.getElementById("introPlay"),
+  modeOverlay: document.getElementById("modeOverlay"),
+  modeCamera: document.getElementById("modeCamera"),
+  modeStatic: document.getElementById("modeStatic"),
 };
 
 let cycleTimer = null;
@@ -78,6 +83,79 @@ let locked = true;
 let cameraReady = false;
 let stream = null;
 let hasPlayed = false;
+let selectedMode = null;
+
+function confettiBurst(opts = {}) {
+  const { pieces = 160, ms = 1400 } = opts;
+
+  let c = document.querySelector("canvas.confetti");
+  if (!c) {
+    c = document.createElement("canvas");
+    c.className = "confetti";
+    document.body.appendChild(c);
+  }
+
+  const ctx = c.getContext("2d");
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  const resize = () => {
+    c.width = Math.floor(window.innerWidth * dpr);
+    c.height = Math.floor(window.innerHeight * dpr);
+    c.style.width = window.innerWidth + "px";
+    c.style.height = window.innerHeight + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  resize();
+
+  const W = window.innerWidth,
+    H = window.innerHeight;
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  const ps = [];
+  for (let i = 0; i < pieces; i++) {
+    ps.push({
+      x: rand(0, W),
+      y: H + rand(10, 140),
+      vx: rand(-1.6, 1.6),
+      vy: rand(-10.5, -6.5),
+      g: rand(0.12, 0.22),
+      w: rand(4, 8),
+      h: rand(2, 5),
+      rot: rand(0, Math.PI * 2),
+      vr: rand(-0.25, 0.25),
+      life: rand(50, 90),
+      color: `hsl(${Math.floor(rand(0, 360))} 90% 65%)`,
+    });
+  }
+
+  const start = performance.now();
+  function tick(t) {
+    const dt = t - start;
+    ctx.clearRect(0, 0, W, H);
+
+    for (const p of ps) {
+      if (p.life <= 0) continue;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.g;
+      p.rot += p.vr;
+      p.life -= 1;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+
+    if (dt < ms) requestAnimationFrame(tick);
+    else ctx.clearRect(0, 0, W, H);
+  }
+
+  requestAnimationFrame(tick);
+  window.addEventListener("resize", resize, { once: true });
+}
 
 function setBouquet(option) {
   const src = ASSET_DIR + option.file;
@@ -113,6 +191,9 @@ function stopCycle() {
   els.againBtn.classList.remove("is-hidden");
   els.downloadBtn.classList.remove("is-hidden");
   els.shutterBtn.classList.add("is-hidden");
+  try {
+    confettiBurst();
+  } catch {}
 }
 
 async function playMusic() {
@@ -176,10 +257,12 @@ function shutdownCamera() {
   if (!stream) return;
   stream.getTracks().forEach((track) => track.stop());
   stream = null;
+  cameraReady = false;
+  els.camShell.classList.remove("is-camera");
 }
 
 function downloadSnapshot() {
-  if (!cameraReady) return;
+  if (selectedMode === "camera" && !cameraReady) return;
   const shellRect = els.camShell.getBoundingClientRect();
   const bouquetRect = els.bouquet.getBoundingClientRect();
   const videoW = els.camera.videoWidth || 720;
@@ -192,12 +275,18 @@ function downloadSnapshot() {
 
   const targetW = shellRect.width;
   const targetH = shellRect.height;
-  const scale = Math.max(targetW / videoW, targetH / videoH);
-  const drawW = videoW * scale;
-  const drawH = videoH * scale;
-  const dx = (targetW - drawW) / 2;
-  const dy = (targetH - drawH) / 2;
-  ctx.drawImage(els.camera, dx, dy, drawW, drawH);
+
+  if (selectedMode === "camera") {
+    const scale = Math.max(targetW / videoW, targetH / videoH);
+    const drawW = videoW * scale;
+    const drawH = videoH * scale;
+    const dx = (targetW - drawW) / 2;
+    const dy = (targetH - drawH) / 2;
+    ctx.drawImage(els.camera, dx, dy, drawW, drawH);
+  } else {
+    ctx.fillStyle = "#0f0a14";
+    ctx.fillRect(0, 0, targetW, targetH);
+  }
 
   const img = els.bouquetImg;
   if (img && img.complete) {
@@ -256,9 +345,68 @@ function downloadSnapshot() {
   link.click();
 }
 
-function onReady() {
+function showIntro() {
+  els.introOverlay.classList.remove("is-hidden");
+  els.introOverlay.setAttribute("aria-hidden", "false");
+}
+
+function showModeSelect() {
+  els.modeOverlay.classList.remove("is-hidden");
+  els.modeOverlay.setAttribute("aria-hidden", "false");
+}
+
+function hideIntro() {
+  els.introOverlay.classList.add("is-hidden");
+  els.introOverlay.setAttribute("aria-hidden", "true");
+}
+
+function hideModeSelect() {
+  els.modeOverlay.classList.add("is-hidden");
+  els.modeOverlay.setAttribute("aria-hidden", "true");
+}
+
+function resetRound() {
+  clearInterval(cycleTimer);
+  locked = true;
+  els.camShell.classList.remove("is-final");
+  els.shutterBtn.classList.add("is-hidden");
+  els.downloadBtn.classList.add("is-hidden");
+  els.againBtn.classList.add("is-hidden");
+  els.playBtn.classList.add("is-hidden");
+}
+
+function applyMode(mode) {
+  selectedMode = mode;
+  els.camShell.classList.remove("mode-static");
+  if (mode === "static") {
+    els.camShell.classList.add("mode-static");
+  }
+}
+
+async function onReady() {
   setBouquet(ROSE_OPTIONS[0]);
   addPetals();
+
+  els.introPlay.addEventListener("click", () => {
+    hideIntro();
+    showModeSelect();
+  });
+
+  els.modeCamera.addEventListener("click", async () => {
+    resetRound();
+    applyMode("camera");
+    hideModeSelect();
+    await setupCamera();
+    els.playBtn.classList.remove("is-hidden");
+  });
+
+  els.modeStatic.addEventListener("click", () => {
+    resetRound();
+    shutdownCamera();
+    applyMode("static");
+    hideModeSelect();
+    els.playBtn.classList.remove("is-hidden");
+  });
 
   els.playBtn.addEventListener("click", async () => {
     if (!hasPlayed) {
@@ -273,7 +421,8 @@ function onReady() {
   });
 
   els.againBtn.addEventListener("click", () => {
-    startCycle();
+    resetRound();
+    showModeSelect();
   });
 
   els.downloadBtn.addEventListener("click", () => {
@@ -282,15 +431,8 @@ function onReady() {
 
   els.musicBtn.addEventListener("click", toggleMusic);
 
-  els.shutterBtn.classList.add("is-hidden");
-  els.againBtn.classList.add("is-hidden");
-  els.downloadBtn.classList.add("is-hidden");
+  resetRound();
+  showIntro();
 }
 
-(async () => {
-  const cameraOk = await setupCamera();
-  if (!cameraOk) {
-    shutdownCamera();
-  }
-  onReady();
-})();
+onReady();
