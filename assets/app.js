@@ -124,7 +124,7 @@ function cardTemplate(item, unlocked, countdownText, visited) {
   const key = String(item.key || "").trim();
   const btnClass = unlocked ? "btn unlocked" : "btn locked";
   const btnText = "Click me";
-  const backTitle = unlocked ? "It’s open ❤️" : "Not yet";
+  const backTitle = unlocked ? `${item.title} ${item.icon || "❤️"}` : "Not yet";
 
   const frontEmoji =
     key === "valentine"
@@ -181,7 +181,7 @@ function hydrate() {
     // Update back face text
     const h3 = el.querySelector(".back h3");
     const cd = el.querySelector(".countdown");
-    if (h3) h3.textContent = unlocked ? "It’s open ❤️" : "Not yet";
+    if (h3) h3.textContent = unlocked ? `${item.title} ${item.icon || "❤️"}` : "Not yet";
     if (cd)
       cd.innerHTML = unlocked
         ? "You can open this now."
