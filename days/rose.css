@@ -108,10 +108,16 @@
 .messageHeader {
   font-size: 18px;
   font-weight: 800;
+  font-style: italic;
+  font-family: "Playfair Display", ui-serif, Georgia, serif;
 }
 
 .revealBtn {
   justify-self: start;
+}
+
+.revealBtn.is-hidden {
+  display: none;
 }
 
 .messageBody {
@@ -193,6 +199,7 @@
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   backdrop-filter: blur(10px);
+  font-size: 24px;
 }
 
 .downloadBtn.is-hidden {

@@ -2,52 +2,72 @@ const ROSE_OPTIONS = [
   {
     name: "Ruby Red",
     file: "ruby-red.png",
-    message: "Bold love, steady heart.",
+    subtitle: "Bold love, steady heart.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Ruby Red. This color reminds me of your lips, your blush, and the heartbeat of Mumbai when we wandered around together. It’s also the simplest color for love. Happy Rose Day to both of us.",
   },
   {
     name: "Blush Pink",
     file: "blush-pink.png",
-    message: "Soft strength, always kind.",
+    subtitle: "Soft strength, always kind.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Blush Pink. This color reminds me of that soft pink sky at sunset, of playful moments, and of the shy smile you gave me in the elevator. It even makes me think of cotton candy I want to share with you someday. Happy Rose Day to both of us.",
   },
   {
     name: "Golden Yellow",
     file: "golden-yellow.png",
-    message: "Sunlit joy, warm and bright.",
+    subtitle: "Sunlit joy, warm and bright.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Golden Yellow. This color reminds me of the sunlight you are in my life, of your love for kadhi chawal and dal, and of Doolally in Mumbai where I surprised you with yellow roses. Happy Rose Day to both of us.",
   },
   {
     name: "Cream Pearl",
     file: "cream-pearl.png",
-    message: "Calm presence, gentle glow.",
+    subtitle: "Calm presence, gentle glow.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Cream Pearl. This color reminds me of the cheesecake we ate together, the jacket you wore on the second-last day we met, and the hand-cream you give me when you apply yours. Happy Rose Day to both of us.",
   },
   {
     name: "Peach Bloom",
     file: "peach-bloom.png",
-    message: "Playful heart, easy laughter.",
+    subtitle: "Playful heart, easy laughter.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Peach Bloom. This color reminds me of you as a person — soft, warm, and safe — and of the colors of Mumbai with you. It’s the feeling of resting in your presence. Happy Rose Day to both of us.",
   },
   {
     name: "Coral Kiss",
     file: "coral-kiss.png",
-    message: "Magnetic energy, sparks everywhere.",
+    subtitle: "Magnetic energy, sparks everywhere.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Coral Kiss. This color reminds me of all the adventures we’ll take together, the street food we’ll eat, the laughs we’ll share, and the nights we’ll stay up talking with our feet touching. Happy Rose Day to both of us.",
   },
   {
     name: "Lavender Mist",
     file: "lavender-mist.png",
-    message: "Dreamy soul, soft magic.",
+    subtitle: "Dreamy soul, soft magic.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Lavender Mist. This color reminds me of gardens and walks with you, of you in a lavender dress on a beach, and of the soft ending of ‘Adore You.’ Happy Rose Day to both of us.",
   },
   {
     name: "Burgundy Night",
     file: "burgundy-night.png",
-    message: "Deep love, fierce loyalty.",
+    subtitle: "Deep love, fierce loyalty.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Burgundy Night. This color reminds me of a future where love, loyalty, and friendship walk together — of the closeness and passion I feel with you. Happy Rose Day to both of us.",
   },
   {
     name: "Ivory Snow",
     file: "ivory-snow.png",
-    message: "Pure heart, endless patience.",
+    subtitle: "Pure heart, endless patience.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Ivory Snow. This color reminds me of snowy mountains, of how I feel when you walk toward me or beside me, and of the white you like on me. Happy Rose Day to both of us.",
   },
   {
     name: "Sunset Orange",
     file: "sunset-orange.png",
-    message: "Radiant charm, fearless smile.",
+    subtitle: "Radiant charm, fearless smile.",
+    message:
+      "Dear Sonal, I bring this message from Saahil. The roses you selected are Sunset Orange. This color reminds me of warm evenings, shared smiles, and the comfort of knowing we have more moments like this ahead. Happy Rose Day to both of us.",
   },
 ];
 
@@ -169,7 +189,7 @@ function setBouquet(option) {
 
 function setResult(option) {
   els.resultTitle.textContent = option.name + " Rose";
-  els.resultText.textContent = option.message;
+  els.resultText.textContent = option.subtitle || "";
   if (els.greetingMsg) {
     els.greetingMsg.textContent = option.message;
   }
@@ -184,6 +204,7 @@ function startCycle() {
   els.playBtn.classList.add("is-hidden");
   els.greetingWrap?.classList.remove("is-visible");
   els.messagePanel?.classList.remove("is-visible");
+  els.revealBtn?.classList.remove("is-hidden");
   cycleTimer = setInterval(() => {
     cycleIndex = (cycleIndex + 1 + Math.floor(Math.random() * 4)) % ROSE_OPTIONS.length;
     setBouquet(ROSE_OPTIONS[cycleIndex]);
@@ -386,6 +407,7 @@ function resetRound() {
   els.playBtn.classList.add("is-hidden");
   els.greetingWrap?.classList.remove("is-visible");
   els.messagePanel?.classList.remove("is-visible");
+  els.revealBtn?.classList.remove("is-hidden");
 }
 
 function applyMode(mode) {
@@ -445,6 +467,7 @@ async function onReady() {
   els.musicBtn.addEventListener("click", toggleMusic);
   els.revealBtn?.addEventListener("click", () => {
     if (els.greetingWrap) els.greetingWrap.classList.add("is-visible");
+    if (els.revealBtn) els.revealBtn.classList.add("is-hidden");
   });
 
   resetRound();
