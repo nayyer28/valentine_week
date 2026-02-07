@@ -3,27 +3,90 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Rose Day</title>
+  <title>Propose Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="./propose.css"/>
 </head>
-<body data-key="propose" data-unlock="2026-02-01T00:00:00">
-  <header class="hero">
-    <h1>🤗 Rose Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="proposePage" data-key="propose" data-unlock="2026-02-07T00:00:00">
+  <main class="proposeWrap">
+    <header class="proposeHeader">
+      <h1>A Proposal for Sonal</h1>
+      <p>The spinner decides the ring!</p>
+    </header>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
+    <section class="orbitScene">
+      <div class="orbitFrame" id="orbitFrame">
+        <div class="orbit" id="orbit">
+          <div class="ring" style="--angle: 10deg; --radius: 215px; --size: 112px;" data-name="Classic Solitaire">
+            <img class="ringImg" src="../assets/rings/classic-solitaire.png" alt="Classic solitaire ring"/>
+          </div>
+          <div class="ring" style="--angle: 80deg; --radius: 225px; --size: 104px;" data-name="Pavé Band">
+            <img class="ringImg" src="../assets/rings/pave-band.png" alt="Pavé band ring"/>
+          </div>
+          <div class="ring" style="--angle: 150deg; --radius: 210px; --size: 116px;" data-name="Leaf Vine">
+            <img class="ringImg" src="../assets/rings/leaf-vine.png" alt="Leaf vine ring"/>
+          </div>
+          <div class="ring" style="--angle: 220deg; --radius: 230px; --size: 108px;" data-name="Three Stone">
+            <img class="ringImg" src="../assets/rings/three-stone.png" alt="Three stone ring"/>
+          </div>
+          <div class="ring" style="--angle: 300deg; --radius: 215px; --size: 100px;" data-name="Partial Bezel">
+            <img class="ringImg" src="../assets/rings/partial-bezel.png" alt="Partial bezel ring"/>
+          </div>
+          <div class="ring" style="--angle: 350deg; --radius: 220px; --size: 98px;" data-name="Twisted Rope">
+            <img class="ringImg" src="../assets/rings/twisted-rope.png" alt="Twisted rope ring"/>
+          </div>
+          <div class="ring" style="--angle: 40deg; --radius: 210px; --size: 104px;" data-name="Knife Edge">
+            <img class="ringImg" src="../assets/rings/knife-edge.png" alt="Knife edge ring"/>
+          </div>
+        </div>
+        <button class="playCore" id="playCore" type="button" aria-label="Spin the rings">Choose your ring</button>
+      </div>
+    </section>
   </main>
 
-  <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
-  </script>
-   <script src="./unlock.js"></script>
+  <div class="revealOverlay" id="revealOverlay" aria-hidden="true">
+    <div class="revealCard" id="ringReveal" aria-live="polite">
+      <div class="revealSweep" aria-hidden="true"></div>
+      <div class="questionBlock" id="questionBlock">
+        <div class="ringTag">Chosen ring</div>
+        <div class="ringPreview" id="ringPreview">
+          <img class="ringPreviewImg" src="../assets/rings/classic-solitaire.png" alt="Classic solitaire ring preview"/>
+        </div>
+        <h2 id="ringName">Moonlight</h2>
+        <p class="revealTitle">Will you be my Valentine</p>
+        <p class="revealLine" id="ringLine">Will you be my partner in crime?</p>
+        <div class="answerRow">
+          <button class="answerBtn yes" id="yesBtn" type="button">Yes</button>
+          <button class="answerBtn no" id="noBtn" type="button">No</button>
+        </div>
+      </div>
+      <div class="reactionWrap is-hidden" id="reactionWrap">
+        <img class="reactionGif" id="reactionGif" src="https://media1.tenor.com/m/WsWej1C3ePYAAAAC/yippee-cat-kitty.gif" alt="Happy reaction"/>
+        <button class="answerBtn honestBtn" id="honestBtn" type="button">Click here to view my honest reaction</button>
+        <div class="videoWrap is-hidden" id="reactionVideoWrap">
+          <video
+            id="reactionVideo"
+            class="reactionVideo"
+            src="../assets/video/meri_selection.mp4"
+            controls
+            playsinline
+            preload="metadata">
+          </video>
+        </div>
+      </div>
+      <p class="answerMsg" id="answerMsg" aria-hidden="true"></p>
+      <button class="answerBtn again is-hidden" id="playAgain" type="button">Play again</button>
+    </div>
+  </div>
+
+  <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/propose_day.mp3" preload="auto" loop></audio>
+  <audio id="celebrationBgm" src="../assets/audio/hooray.mp3" preload="auto" loop></audio>
+
+  <script src="./propose.js"></script>
+  <script src="./unlock.js"></script>
 </body>
 </html>

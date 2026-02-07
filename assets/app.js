@@ -11,7 +11,7 @@ const DAYS = [
     key: "propose",
     title: "Propose Day",
     icon: "💍",
-    unlock: "2026-02-08T00:00:00",
+    unlock: "2026-02-07T00:00:00",
     href: "./days/propose.html",
     hint: "This one needs your full attention.",
   },
