@@ -19,7 +19,7 @@ const DAYS = [
     key: "chocolate",
     title: "Chocolate Day",
     icon: "🍫",
-    unlock: "2026-02-09T00:00:00",
+    unlock: "2026-02-09T01:00:00",
     href: "./days/chocolate.html",
     hint: "Sweet, simple, and very you.",
   },
