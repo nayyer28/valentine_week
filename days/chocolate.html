@@ -32,6 +32,12 @@
             Happy Chocolate Day, love. Expect this chocolate to be delivered to you sometime today.
           </p>
           <img
+            class="final-celebration is-hidden"
+            id="finalCelebrate"
+            src="https://media.tenor.com/jNEeZblha6YAAAAi/valentine-valentine-day.gif"
+            alt="Happy Chocolate Day celebration"
+          />
+          <img
             class="final-gif"
             id="finalGif"
             src="https://media1.tenor.com/m/WFys_BZKJEQAAAAC/is-that-your-final-answer-regis-phibin.gif"
@@ -60,6 +66,9 @@
       <input type="hidden" name="link" id="chocoLink" />
     </form>
   </div>
+
+  <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/chocolate.mp3" preload="auto" loop></audio>
 
   <script src="./chocolate.js"></script>
   <script src="./unlock.js"></script>
