@@ -1,29 +1,67 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chocolate Day</title>
-  <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="./chocolate.css" />
 </head>
-<body data-key="chocolate" data-unlock="2026-02-09T01:00:00">
-  <header class="hero">
-    <h1>🤗 Hug Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="choco" data-key="chocolate" data-unlock="2026-02-08T01:00:00">
+  <div class="wrap">
+    <header class="hero choco-hero">
+      <h1>Chocolate Day</h1>
+      <p>Choose your sweet. You only get one choice.</p>
+    </header>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
-  </main>
+    <section class="choco-grid" id="chocoGrid" aria-label="Chocolate options"></section>
 
-  <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
-  </script>
+
+    <div class="choco-overlay" id="chocoOverlay" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="focus-card" id="focusCard">
+        <img class="focus-img" id="focusImg" src="" alt="" />
+        <div class="focus-body">
+          <h2 class="focus-title" id="focusTitle"></h2>
+          <p class="focus-message is-hidden" id="focusMessage">
+            Happy Chocolate Day, love. Expect this chocolate to be delivered to you sometime today.
+          </p>
+          <img
+            class="final-gif"
+            id="finalGif"
+            src="https://media1.tenor.com/m/WFys_BZKJEQAAAAC/is-that-your-final-answer-regis-phibin.gif"
+            alt="Is this your final answer?"
+          />
+          <div class="focus-actions">
+            <button class="btn" id="confirmYes" type="button">Yes</button>
+            <button class="btn secondary" id="confirmNo" type="button">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form
+      id="chocoForm"
+      name="chocolate-choice"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      class="visually-hidden"
+    >
+      <input type="hidden" name="form-name" value="chocolate-choice" />
+      <input type="text" name="bot-field" class="visually-hidden" aria-hidden="true" />
+      <input type="hidden" name="chocolate" id="chocoField" />
+      <input type="hidden" name="image" id="chocoImage" />
+      <input type="hidden" name="link" id="chocoLink" />
+    </form>
+  </div>
+
+  <script src="./chocolate.js"></script>
   <script src="./unlock.js"></script>
 </body>
 </html>
