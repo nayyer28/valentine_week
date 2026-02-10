@@ -4,27 +4,63 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Promise Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;600&family=Parisienne&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="./promise.css"/>
 </head>
-<body data-key="promise" data-unlock="2026-02-11T00:00:00">
-  <header class="hero">
-    <h1>🤗 Hug Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="promisePage" data-key="promise" data-unlock="2026-02-10T04:30:00">
+  <main class="promiseWrap">
+    <header class="promiseHeader">
+      <h1>Promise Day</h1>
+      <p>A small contract from me to you.</p>
+    </header>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
+    <section class="document" aria-live="polite">
+      <h2 class="documentTitle">The Promise Charter</h2>
+      <ol class="promiseList" id="promiseList"></ol>
+
+      <div class="signatureBlock" id="signatureBlock">
+        <div class="signatureLabel">If you agree, please sign here.</div>
+        <canvas class="signaturePad" id="signaturePad"></canvas>
+        <div class="signatureActions">
+          <button class="btn primary" id="acceptBtn" type="button">Accept</button>
+          <button class="btn ghost" id="denyBtn" type="button">Deny</button>
+        </div>
+        <div class="promiseStatus" id="promiseStatus"></div>
+        <div class="promisePrompt is-hidden" id="promisePrompt" aria-hidden="true">Please sign first.</div>
+        <div class="promisePanel is-hidden" id="acceptPanel" aria-hidden="true">
+          <img class="promiseGif" src="https://media1.tenor.com/m/tHWQZ5sjvHIAAAAd/bridgerton-jonathan-bailey.gif" alt="Happy Promise Day"/>
+          <div class="promiseFancy">Happy Promise Day Love! You don't know how happy you make me.</div>
+        </div>
+        <div class="promisePanel is-hidden" id="denyPanel" aria-hidden="true">
+          <img class="promiseGif is-hidden" id="fineGif" src="../assets/img/promise_fine.gif" alt="Promise fine"/>
+          <div class="promiseWarning">You must accept a fine of 1 crore rupees.</div>
+          <div class="signatureActions">
+            <button class="btn ghost" id="rethinkBtn" type="button">Reconsider</button>
+            <button class="btn primary" id="acceptFineBtn" type="button">Accept consequences</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
-  </script>
+  <div class="introOverlay" id="introOverlay" aria-hidden="false">
+    <div class="introCard">
+      <h2>My dearest Sonal,</h2>
+      <p>
+        Welcome to our very first Promise Day.
+        Are you ready to view the promises I want to make to you for this occasion?
+      </p>
+      <button class="introBtn" id="introStart" type="button">Start</button>
+    </div>
+  </div>
 
+  <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/promise_day.mp3" preload="auto" loop></audio>
+
+  <script src="./promise.js"></script>
   <script src="./unlock.js"></script>
 </body>
 </html>

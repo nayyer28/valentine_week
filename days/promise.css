@@ -1,0 +1,308 @@
+:root {
+  --promise-paper: #f4ead7;
+  --promise-paper-deep: #e9dcc2;
+  --promise-ink: #3b2f2a;
+  --promise-accent: #7a4a32;
+  --promise-shadow: 0 26px 70px rgba(20, 12, 8, 0.35);
+}
+
+body.promisePage {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 700px at 10% 0%, rgba(255, 214, 164, 0.25), transparent 60%),
+    radial-gradient(900px 620px at 90% 10%, rgba(255, 192, 142, 0.22), transparent 55%),
+    linear-gradient(180deg, #2b1d17, #120c09 70%);
+  color: var(--promise-ink);
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  padding: 28px 18px 90px;
+}
+
+.promiseWrap {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.promiseHeader {
+  text-align: center;
+  color: #f5e7cf;
+  margin-bottom: 20px;
+}
+
+.promiseHeader h1 {
+  margin: 0 0 6px;
+  font-size: clamp(32px, 4.6vw, 52px);
+  letter-spacing: 0.6px;
+  font-family: "Cinzel", "Times New Roman", serif;
+}
+
+.promiseHeader p {
+  margin: 0;
+  color: rgba(245, 231, 207, 0.8);
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.document {
+  position: relative;
+  padding: clamp(28px, 4vw, 48px);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, var(--promise-paper), var(--promise-paper-deep)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(58, 44, 37, 0.04) 0px,
+      rgba(58, 44, 37, 0.04) 1px,
+      transparent 1px,
+      transparent 24px
+    );
+  box-shadow: var(--promise-shadow);
+  border: 1px solid rgba(80, 54, 40, 0.25);
+  overflow: hidden;
+}
+
+.document::before,
+.document::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.document::before {
+  background:
+    radial-gradient(400px 200px at 10% 20%, rgba(120, 86, 66, 0.12), transparent 70%),
+    radial-gradient(360px 240px at 90% 15%, rgba(120, 86, 66, 0.12), transparent 70%);
+  opacity: 0.7;
+}
+
+.document::after {
+  background:
+    repeating-linear-gradient(
+      120deg,
+      rgba(90, 66, 52, 0.04) 0px,
+      rgba(90, 66, 52, 0.04) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+  opacity: 0.28;
+}
+
+.documentTitle {
+  text-align: center;
+  margin: 0 0 16px;
+  font-size: clamp(26px, 3.4vw, 36px);
+  font-family: "Cinzel", "Times New Roman", serif;
+  color: var(--promise-accent);
+  letter-spacing: 1px;
+}
+
+.promiseList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px;
+  display: grid;
+  gap: 14px;
+}
+
+.promiseLine {
+  font-family: "Parisienne", "Brush Script MT", cursive;
+  font-size: clamp(20px, 3vw, 30px);
+  color: #3b2f2a;
+  min-height: 32px;
+  position: relative;
+}
+
+.promiseLine::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 4px;
+  width: 3px;
+  height: 26px;
+  background: rgba(60, 40, 30, 0.6);
+  opacity: 0;
+}
+
+.promiseLine.is-active::after {
+  opacity: 1;
+  animation: caretBlink 0.9s step-end infinite;
+}
+
+.signatureBlock {
+  margin-top: 10px;
+  display: grid;
+  gap: 12px;
+}
+
+
+.signatureLabel {
+  font-size: 16px;
+  color: rgba(59, 47, 42, 0.8);
+}
+
+.signaturePad {
+  width: 100%;
+  height: 150px;
+  border-radius: 14px;
+  border: 1px solid rgba(80, 54, 40, 0.28);
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+  touch-action: none;
+}
+
+.signatureActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.signatureActions .btn {
+  border-radius: 12px;
+  padding: 10px 16px;
+  border: 1px solid rgba(80, 54, 40, 0.3);
+  background: rgba(122, 74, 50, 0.12);
+  color: #3b2f2a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.signatureActions .btn.primary {
+  background: rgba(122, 74, 50, 0.22);
+  border-color: rgba(122, 74, 50, 0.45);
+}
+
+.signatureActions .btn.ghost {
+  background: transparent;
+}
+
+.signatureActions .btn.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.promiseStatus {
+  min-height: 22px;
+  font-weight: 600;
+  color: #4b3226;
+}
+
+.fineMsg {
+  color: #7a1f1f;
+}
+
+.promisePrompt {
+  color: #7a1f1f;
+  font-weight: 700;
+  text-align: center;
+}
+
+.promisePrompt.is-hidden {
+  display: none;
+}
+
+.promisePanel {
+  margin-top: 18px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(80, 54, 40, 0.24);
+  background: rgba(255, 255, 255, 0.7);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.promisePanel.is-hidden {
+  display: none;
+}
+
+.promiseGif.is-hidden {
+  display: none;
+}
+
+.promiseGif {
+  width: min(220px, 70vw);
+  height: auto;
+}
+
+.promiseFancy {
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: 0.8px;
+  color: #5a3a2a;
+}
+
+.promiseWarning {
+  font-weight: 700;
+  color: #7a1f1f;
+  font-size: clamp(16px, 2.2vw, 20px);
+}
+
+.introOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 10, 6, 0.6);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 9000;
+}
+
+.introOverlay.is-hidden {
+  display: none;
+}
+
+.introCard {
+  width: min(640px, 90vw);
+  padding: 26px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(120, 86, 66, 0.35);
+  background:
+    linear-gradient(180deg, rgba(255, 246, 229, 0.98), rgba(244, 230, 205, 0.98));
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(16, 10, 6, 0.45);
+  color: #3b2f2a;
+}
+
+.introCard h2 {
+  margin: 0 0 10px;
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: clamp(24px, 3vw, 30px);
+  letter-spacing: 0.6px;
+}
+
+.introCard p {
+  margin: 0 0 18px;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: rgba(59, 47, 42, 0.9);
+}
+
+.introBtn {
+  border-radius: 12px;
+  padding: 10px 20px;
+  border: 1px solid rgba(122, 74, 50, 0.45);
+  background: rgba(122, 74, 50, 0.2);
+  color: #3b2f2a;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@keyframes caretBlink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .signatureActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
