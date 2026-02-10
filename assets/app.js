@@ -35,7 +35,7 @@ const DAYS = [
     key: "promise",
     title: "Promise Day",
     icon: "🤞",
-    unlock: "2026-02-11T04:30:00",
+    unlock: "2026-02-10T02:30:00",
     href: "./days/promise.html",
     hint: "No drama. Just intent.",
   },
