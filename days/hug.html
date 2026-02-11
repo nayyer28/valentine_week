@@ -4,26 +4,39 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Hug Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Sora:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="./hug.css"/>
 </head>
-<body data-key="hug" data-unlock="2026-02-12T04:30:00">
-  <header class="hero">
-    <h1>🤗 Hug Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="hugPage" data-key="hug" data-unlock="2026-02-12T04:30:00">
+  <main class="hugStage" aria-live="polite">
+    <div class="hugCopy">
+      <p class="hugTitle" id="line1">Happy Hug Day, Love.</p>
+      <button class="hugPlay" id="hugPlay" type="button" aria-label="Play">▶︎</button>
+      <div class="hugSequence" id="hugSequence" aria-hidden="true">
+        <p class="hugLine" id="line2">Put your phone down. Sit back. Don’t scroll.</p>
+        <p class="hugLine" id="line3">This is how long I’d hold you if I were there.</p>
+        <p class="hugLine" id="line4">If you felt calmer, that’s the hug working.</p>
+        <p class="hugLine" id="line5">And many more real hugs will follow when I see you.</p>
+      </div>
+    </div>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
+    <div class="hugOrb is-hidden" id="hugOrb" aria-hidden="true">
+      <div class="hugHalo"></div>
+      <svg class="hugRing" viewBox="0 0 140 140" aria-hidden="true">
+        <circle class="hugRingTrack" cx="70" cy="70" r="54"></circle>
+        <circle class="hugRingProgress" id="timerRing" cx="70" cy="70" r="54"></circle>
+      </svg>
+      <div class="hugTimerValue" id="timerValue">25</div>
+    </div>
   </main>
 
-  <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
-  </script>
+  <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/Hug_Day.mp3" preload="auto" loop></audio>
+
+  <script src="./hug.js"></script>
   <script src="./unlock.js"></script>
 </body>
 </html>
