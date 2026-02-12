@@ -51,7 +51,7 @@ const DAYS = [
     key: "kiss",
     title: "Kiss Day",
     icon: "💋",
-    unlock: "2026-02-13T04:30:00",
+    unlock: "2026-02-13T00:30:00",
     href: "./days/kiss.html",
     hint: "Soft. Not loud.",
   },

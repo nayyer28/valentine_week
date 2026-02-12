@@ -4,26 +4,84 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Kiss Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="./kiss.css"/>
 </head>
-<body data-key="kiss" data-unlock="2026-02-13T04:30:00">
-  <header class="hero">
-    <h1>🤗 Hug Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="kissPage" data-key="kiss" data-unlock="2026-02-13T00:30:00">
+  <main class="kissStage" aria-live="polite">
+    <section class="kissIntro" id="kissIntro">
+      <h1 class="kissTitle">Happy Pappi Day</h1>
+      <button class="kissPlay" id="kissPlay" type="button" aria-label="Start slideshow">▶</button>
+    </section>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
+    <section class="kissDeckWrap" id="kissDeckWrap" aria-hidden="true">
+      <div class="kissDeck" id="kissDeck">
+        <article class="kissSlide kissSlide--text">
+          <p>I know we are really far away from each other 🌍</p>
+        </article>
+        <article class="kissSlide kissSlide--text">
+          <p>I know how patiently we wait everyday 🫶</p>
+        </article>
+        <article class="kissSlide kissSlide--text">
+          <p>I know how badly we wanna kiss each other's face off 💋</p>
+        </article>
+        <article class="kissSlide kissSlide--text">
+          <p>And we will do that and much more in April 😉</p>
+        </article>
+        <article class="kissSlide kissSlide--text">
+          <p>But for now is a little game that I made for you 🎁</p>
+        </article>
+        <article class="kissSlide kissSlide--text">
+          <p>The final reveal is worth swiping for 😉</p>
+        </article>
+        <article class="kissSlide">
+          <img src="../assets/img/kiss/1.jpeg" alt="Kiss Day photo 1" loading="lazy"/>
+        </article>
+        <article class="kissSlide">
+          <img src="../assets/img/kiss/2.jpeg" alt="Kiss Day photo 2" loading="lazy"/>
+        </article>
+        <article class="kissSlide">
+          <img src="../assets/img/kiss/3.jpeg" alt="Kiss Day photo 3" loading="lazy"/>
+        </article>
+        <article class="kissSlide">
+          <img src="../assets/img/kiss/4.jpeg" alt="Kiss Day photo 4" loading="lazy"/>
+        </article>
+        <article class="kissSlide">
+          <img src="../assets/img/kiss/5.jpeg" alt="Kiss Day photo 5" loading="lazy"/>
+        </article>
+        <article class="kissSlide">
+          <img src="https://media.tenor.com/E90r971nBbIAAAAj/kiss-lip-kiss.gif" alt="Kiss gif" loading="lazy"/>
+        </article>
+        <article class="kissSlide kissSlide--text">
+          <p>I love you ❤️</p>
+        </article>
+      </div>
+
+      <div class="kissDots" id="kissDots" aria-hidden="true">
+        <span class="kissDot is-active"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+        <span class="kissDot"></span>
+      </div>
+    </section>
   </main>
 
-  <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
-  </script>
+  <button class="musicFab" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/kiss_day.mp3" preload="auto" loop></audio>
+
+  <script src="./kiss.js"></script>
   <script src="./unlock.js"></script>
 </body>
 </html>
