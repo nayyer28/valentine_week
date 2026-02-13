@@ -4,26 +4,34 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Valentine's Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/styles.css"/>
+  <link rel="stylesheet" href="./valentine.css"/>
 </head>
-<body data-key="valentine" data-unlock="2026-02-14T04:30:00">
-  <header class="hero">
-    <h1>🤗 Hug Day</h1>
-    <p>Come back here today. I left something for you.</p>
-  </header>
+<body class="valentinePage" data-key="valentine" data-unlock="2026-02-14T00:30:00">
+  <main class="valStage is-locked" id="valStage" aria-live="polite">
+    <section class="valEntry" id="valEntry">
+      <button class="valEntryPlay" id="valEntryPlay" type="button" aria-label="Start Valentine's celebration">▶</button>
+    </section>
 
-  <main class="card">
-    <p>Placeholder content. I’ll add the real surprise soon.</p>
-    <button class="btn" id="done">Mark as completed</button>
-    <a class="btn" href="../index.html">Back</a>
+    <section class="valHero" id="valHero">
+      <div class="valBanner" id="valBanner" data-text="Happy Valentine's Day">Happy Valentine's Day</div>
+      <button class="valCta" id="valCta" type="button">Look what's trending on Valentine's Day</button>
+    </section>
+
+    <section class="valVideoWrap" id="valVideoWrap" aria-hidden="true">
+      <video id="valVideo" class="valVideo" src="../assets/video/valentine_day.mp4" playsinline preload="metadata" controls></video>
+    </section>
+
+    <div class="valFx" id="valFx" aria-hidden="true"></div>
   </main>
 
-  <script>
-    document.getElementById("done").addEventListener("click", () => {
-      localStorage.setItem("done:hug", "1");
-      alert("Saved ❤️");
-    });
-  </script>
+  <button class="musicFab valMusicHidden" id="musicBtn" aria-pressed="false" title="Play music">▶︎ 🎧</button>
+  <audio id="bgm" src="../assets/audio/valentine_day.mp3" preload="auto" loop></audio>
+
+  <script src="./valentine.js"></script>
   <script src="./unlock.js"></script>
 </body>
 </html>
